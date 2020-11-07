@@ -1,5 +1,5 @@
 require('dotenv').config()
 
 export default {
-    REACT_APP_API_BASE: process.env.REACT_APP_API_BASE || 'http://localhost:8080/api'
+    API_ENDPOINT='https://petful-api-tja.herokuapp.com'
 }
