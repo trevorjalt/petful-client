@@ -1,0 +1,30 @@
+.Header {
+    height: 20vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;;
+    background-color: pink;
+    padding: 1vw 2vw 1vw 2vw;
+    margin-bottom: 4vh;
+    text-decoration: none;
+}
+
+.Header__text {
+    font-weight: bold;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.logo {
+    font-size: 6vh;
+    text-decoration: none;
+    color: black;
+}
+
+.navBar {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: black;
+}
