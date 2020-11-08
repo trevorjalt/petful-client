@@ -6,7 +6,9 @@ import './Adopt.css'
 class Adopt extends Component {
     state = {
         cat: {},
+        prevCat: {},
         dog: {},
+        adopter: '',
         name: '',
         petName: '',
         petType: 'cat',
@@ -16,7 +18,6 @@ class Adopt extends Component {
         firstOut: null,
         timer: null
     }
-
 
     componentDidMount() {
         petServices.getCat()
@@ -29,10 +30,13 @@ class Adopt extends Component {
                 this.setState({ dog: dog })
         )
 
-        petServices.getPeople()
+        if ((this.state.people.length === 0) || this.state.people[0] !== 'Randy Lahey') {
+            this.setState({ people: [] })
+            petServices.getPeople()
             .then(person =>
                 this.setState({ people: person })
         )
+        }
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -54,17 +58,19 @@ class Adopt extends Component {
         }
     }
 
-
     handleAddName = e => {
         e.preventDefault()
         let name = this.state.name
 
         PetServices.addPerson(name)
-            .then(people => this.setState({ people }))
-        
+            .then(person => this.setState({ 
+                people: person,
+                adopter: name
+            }))
+
         let timer = setInterval(() => {
             this.handleInterval()
-        }, 1000)
+        }, 3000)
 
         this.setState({ timer })
     }
@@ -72,18 +78,21 @@ class Adopt extends Component {
 
     handleAdoption = e => {
         if (this.state.petType === 'cat') {
+            this.setState({ prevCat: this.state.cat })
             PetServices.deleteCat(this.state.cat)
                 .then(this.setState({
+                    adopter: '',
                     adopted: true, 
-                    first: !this.state.first,
-                    firstOut: !this.state.firstOut 
+                    first: false,
+                    firstOut: !this.state.first
                 }))  
         } else {
             PetServices.deleteDog(this.state.dog)
                 .then(this.setState({
+                    adopter: '',
                     adopted: true, 
-                    first: !this.state.first,
-                    firstOut: !this.state.firstOut 
+                    first: false,
+                    firstOut: !this.state.first
                 }))  
         }
     }
@@ -94,7 +103,7 @@ class Adopt extends Component {
             'Goku',
             'Vegeta',
             'Gohan',
-            'Trunks'
+            'Trunks' 
         ]
 
         if (this.state.people.length > 1) {
@@ -106,17 +115,28 @@ class Adopt extends Component {
             } else {
                 PetServices.deleteDog()
                     .then(this.setState({ firstOut: !this.state.firstOut }))  
-            }
+            }          
         } else {
-            this.setState({ first: true })
             clearInterval(this.state.timer)
-            let i = 0
+            let j = 0
 
-            setInterval(() => {
-                PetServices.addPerson(fighterZ[i])
-                .then(people => this.setState({ people }))
-                i += 1
-            }, 2000)}
+            let addInterval = setInterval(() => {
+                if (j <= 4){
+                    PetServices.addPerson(fighterZ[j])
+                        .then(person => this.setState({ 
+                            people : person
+                        }))
+                        j += 1
+                }
+            }, 5000)
+                
+
+            this.setState({ first: true })
+
+            if (this.state.people.length === 5) {
+                clearInterval(addInterval)
+            }
+        }
     }
 
 
@@ -205,7 +225,7 @@ class Adopt extends Component {
                     {this.state.adopted ? (
                         <div>
                             {this.state.petType === 'cat'
-                                ? (<h3>Congrats you adopted {this.state.cat.name}!</h3>)
+                                ? (<h3>Congrats you adopted {this.state.prevCat.name}!</h3>)
                                 : (<h3>Congrats you adopted {this.state.dog.name}!</h3>)}
                         </div>
                     ) : ''}

@@ -1,6 +1,17 @@
 import config from './config'
 
 const petServices = {
+    getPets () {
+        return fetch(`${config.API_ENDPOINT}/`)
+            .then(res =>
+                (!res.ok)
+                    ? res.json().then(event => Promise.reject(event))
+                    : res.json()
+            )
+
+    },
+
+
     getPeople() {
         return fetch(`${config.API_ENDPOINT}/people`)
             .then(res =>
@@ -10,6 +21,7 @@ const petServices = {
             )
     },
     
+
     addPerson(name) {
         return fetch(`${config.API_ENDPOINT}/people`, {
             method: "POST",
@@ -25,6 +37,7 @@ const petServices = {
             )
     },
 
+
     getCat() {
         return fetch(`${config.API_ENDPOINT}/pets/cat`)
             .then(res =>
@@ -33,6 +46,7 @@ const petServices = {
                     : res.json()
             )
     },
+
 
     deleteCat() {
         return fetch(`${config.API_ENDPOINT}/pets/cat`, {
@@ -45,6 +59,7 @@ const petServices = {
             )
     },
 
+
     getDog() {
         return fetch(`${config.API_ENDPOINT}/pets/dog`)
             .then(res =>
@@ -54,6 +69,7 @@ const petServices = {
             )
     },
 
+    
     deleteDog() {
         return fetch(`${config.API_ENDPOINT}/pets/dog`, {
           method: "DELETE",
