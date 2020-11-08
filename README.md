@@ -5,8 +5,8 @@ At petFul you have the choice between a dog and a cat, and animals are adopted o
 ## Repo Details
 
 * Live: [petFul-adoptions](https://petful-live.vercel.app/ "petFul adoptions")
-- Client - [petFul-client](https://github.com/trevorjalt/petful-client "petFul Client")
-- Server - [petFul-server](https://github.com/trevorjalt/petful-server "petFul Api")
+* Client - [petFul-client](https://github.com/trevorjalt/petful-client "petFul Client")
+* Server - [petFul-server](https://github.com/trevorjalt/petful-server "petFul Api")
 
 ## How to use the API
 
