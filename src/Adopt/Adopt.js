@@ -231,7 +231,7 @@ export default class Adopt extends Component {
                     type='text' 
                     name='name' 
                     id='name-input'
-                    onInput={e => this.onInputName(e)}
+                    onChange={e => this.onInputName(e)}
                     value={this.state.name}
                 />
                 <button
