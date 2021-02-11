@@ -1,6 +1,6 @@
 import config from './config'
 
-const petServices = {
+const PetService = {
     getPets () {
         return fetch(`${config.API_ENDPOINT}/`)
             .then(res =>
@@ -82,4 +82,4 @@ const petServices = {
     },
 }
 
-export default petServices
+export default PetService

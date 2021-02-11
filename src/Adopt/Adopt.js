@@ -1,141 +1,211 @@
 import React, {Component} from 'react'
-import petServices from '../pet-services'
-import PetServices from '../pet-services'
+import PetService from '../pet-service'
 import './Adopt.css'
 
-class Adopt extends Component {
+export default class Adopt extends Component {
     state = {
         cat: {},
-        prevCat: {},
         dog: {},
-        adopter: '',
-        name: '',
-        petName: '',
-        petType: 'cat',
+        loading: false,
         people: [],
+        name: '',
+        adopter: '',
+        upForAdoption: '',
+        previousAdopter: '',
+        adoptionsInProcess: false,
         adopted: null,
-        first: null,
-        firstOut: null,
-        timer: null
+        adoptedPet: {},
     }
 
     componentDidMount() {
-        petServices.getCat()
+        this.setState({ loading: true })
+
+        PetService.getCat()
             .then(cat =>
                 this.setState({ cat: cat })
-            )
-        
-        petServices.getDog()
+        )
+    
+        PetService.getDog()
             .then(dog =>
                 this.setState({ dog: dog })
         )
 
-        if ((this.state.people.length === 0) || this.state.people[0] !== 'Randy Lahey') {
-            this.setState({ people: [] })
-            petServices.getPeople()
+        PetService.getPeople()
             .then(person =>
                 this.setState({ people: person })
         )
-        }
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        if (prevState.firstOut !== this.state.firstOut) {
-            petServices.getCat()
-                .then(cat =>
-                    this.setState({ cat: cat })
-                )
-
-            petServices.getDog()
-                .then(dog =>
-                    this.setState({ dog: dog })
-                )
-
-            petServices.getPeople()
-                .then(person =>
-                    this.setState({ people: person })
-                )
-        }
     }
 
     handleAddName = e => {
         e.preventDefault()
         let name = this.state.name
 
-        PetServices.addPerson(name)
+        this.setState ({ adopted: false })
+
+        PetService.addPerson(name)
             .then(person => this.setState({ 
                 people: person,
-                adopter: name
+                adopter: name,
+                name: ''
             }))
 
-        let timer = setInterval(() => {
-            this.handleInterval()
-        }, 3000)
+        let type = ''
 
-        this.setState({ timer })
-    }
-
-
-    handleAdoption = e => {
-        if (this.state.petType === 'cat') {
-            this.setState({ prevCat: this.state.cat })
-            PetServices.deleteCat(this.state.cat)
-                .then(this.setState({
-                    adopter: '',
-                    adopted: true, 
-                    first: false,
-                    firstOut: !this.state.first
-                }))  
-        } else {
-            PetServices.deleteDog(this.state.dog)
-                .then(this.setState({
-                    adopter: '',
-                    adopted: true, 
-                    first: false,
-                    firstOut: !this.state.first
-                }))  
-        }
-    }
-
-
-    handleInterval = () => { 
-        let fighterZ = [
-            'Goku',
-            'Vegeta',
-            'Gohan',
-            'Trunks' 
-        ]
-
-        if (this.state.people.length > 1) {
-
-            if (this.state.petType === 'cat') {
-                PetServices.deleteCat()
-                    .then(this.setState({ firstOut: !this.state.firstOut }))  
-                       
+        this.timeout = setInterval(() => {
+            let randomPet = Math.floor(Math.random() * 2)
+            if (randomPet === 0) {
+                type = 'dogs'
             } else {
-                PetServices.deleteDog()
-                    .then(this.setState({ firstOut: !this.state.firstOut }))  
-            }          
-        } else {
-            clearInterval(this.state.timer)
-            let j = 0
-
-            let addInterval = setInterval(() => {
-                if (j <= 4){
-                    PetServices.addPerson(fighterZ[j])
-                        .then(person => this.setState({ 
-                            people : person
-                        }))
-                        j += 1
-                }
-            }, 5000)
-                
-
-            this.setState({ first: true })
-
-            if (this.state.people.length === 5) {
-                clearInterval(addInterval)
+                type = 'cats'
             }
+
+            if (type === 'dogs') {
+                this.setState({ 
+                    upForAdoption: this.state.dog.name,
+                    previousAdopter: this.state.people[0],
+                    adoptionsInProcess: true
+                })
+                PetService.deleteDog()
+                    .then(res => {
+                        PetService.getDog()
+                            .then(dog => {
+                                this.setState({ dog: dog })
+                            })
+                            .catch(error => {
+                                console.error({ error })
+                            })
+                        PetService.getPeople()
+                            .then(people => {
+                                this.setState({ people: people})
+                            })
+                            .catch(error => {
+                                console.error({ error })
+                            })       
+                })
+            }
+
+            if (type === 'cats') {
+                this.setState({ 
+                    upForAdoption: this.state.cat.name,
+                    previousAdopter: this.state.people[0],
+                    adoptionsInProcess: true
+                })
+                PetService.deleteCat()
+                    .then(res => {
+                        PetService.getCat()
+                            .then(cat => {
+                                this.setState({ cat: cat })
+                            })
+                            .catch(error => {
+                                console.error({ error })
+                            })
+                        PetService.getPeople()
+                            .then(people => {
+                                this.setState({ people: people})
+                            })
+                            .catch(error => {
+                                console.error({ error })
+                            })       
+                })
+            }
+        }, 5000)
+    }
+
+    handleAddPeopleToQueue() {
+        let addPeople = setTimeout(() => {
+            if (this.state.people === 5) {
+                clearTimeout(addPeople)
+            }
+    
+            const futureAdopters = [
+                'Major Samantha Carter',
+                'Teal\'c',
+                'Dr. Daniel Jackson',
+                'Colonel Jack O\'Neill',
+                'Major General George Hammond',
+                'Sgt. Walter Harriman',
+                'Lt. Colonel Cameron Mitchell',
+                'Vala Mal Doran',
+                'Jonas Quinn',
+                'Master Bra\'tac',
+                'Selmak',
+                'Lt. Colonel John Sheppard',
+                'Teyla Emmagan',
+                'Dr. Rodney McKay',
+                'Ronon Dex',
+                'Dr. Elizabeth Weir',
+                'Richard Woolsey',
+                'Thor',
+                'Freyr',
+                'Penegal',
+            ]
+    
+            const randomAdopter = futureAdopters[Math.floor(Math.random() * futureAdopters.length)]
+    
+            if (this.state.people.length < 5) {
+                PetService.addPerson(randomAdopter)
+                .then(person => {
+                    this.setState({ people: person })
+                })
+                .catch(error => {
+                    console.error({ error })
+                })
+            }
+        }, 5000)
+    }
+
+
+    handleAdoption = (type) => {
+        if (type === 'cats') {
+            this.setState({ 
+                adopted: true,
+                adopter: '',
+                adoptedPet: this.state.cat,
+                adoptionsInProcess: false,
+            })
+            PetService.deleteCat()
+                .then(res => {
+                    PetService.getCat()
+                        .then(cat => {
+                            this.setState({ cat: cat })
+                        })
+                        .catch(error => {
+                            console.error({ error })
+                        })
+                    PetService.getPeople()
+                        .then(people => {
+                            this.setState({ people: people})
+                        })
+                        .catch(error => {
+                            console.error({ error })
+                        })       
+            })
+        }
+
+        if (type === 'dogs') {
+            this.setState({ 
+                adopted: true,
+                adopter: '',
+                adoptedPet: this.state.dog,
+                adoptionsInProcess: false
+            })
+            PetService.deleteCat()
+                .then(res => {
+                    PetService.getDog()
+                        .then(dog => {
+                            this.setState({ dog: dog })
+                        })
+                        .catch(error => {
+                            console.error({ error })
+                        })
+                    PetService.getPeople()
+                        .then(people => {
+                            this.setState({ people: people})
+                        })
+                        .catch(error => {
+                            console.error({ error })
+                        })       
+            })
         }
     }
 
@@ -145,16 +215,14 @@ class Adopt extends Component {
     }
 
 
-    onPetTypeSelect = e => {
-        this.setState({ petType: e.target.value })
-    }
-
-
     renderCat = () => {
         let { cat } = this.state
-
+        console.log(cat)
         return (
             <section>
+                {this.state.people[0] === this.state.adopter
+                    ? <button className='adopt-button' onClick={(e) => this.handleAdoption('cats')}>Adopt</button>
+                    : ''}
                 <img src={cat.imageURL} alt={cat.description} />
                 <ul>
                     <li>Name: {cat.name}</li>
@@ -174,6 +242,9 @@ class Adopt extends Component {
 
         return (
             <section>
+                {this.state.people[0] === this.state.adopter
+                    ? <button className='adopt-button' onClick={(e) => this.handleAdoption('dogs')}>Adopt</button>
+                    : ''}
                 <img src={dog.imageURL} alt={dog.description} />
                 <ul>
                     <li>Name: {dog.name}</li>
@@ -203,63 +274,64 @@ class Adopt extends Component {
 
 
     render() {
+        if (this.state.people[0] === this.state.adopter) {
+            this.handleAddPeopleToQueue()
+            clearInterval(this.timeout)
+        }
         return (
             <div className='adopt'>
                 <div className='adopt__content'>
-                    <h1>Adoptions</h1>
-                    <h2>Up for adoption</h2>
-                    {this.state.petType === 'cat'
-                        ? this.renderCat()
-                        : this.renderDog()}
-                    {this.state.first ? (
-                        <div>
-                        <h3>Your Up! Click to Adopt!</h3>
-                        <button
-                            type='button'
-                            onClick={this.handleAdoption}
-                        >
-                            Adopt
-                        </button>
-                        </div>)
+                    {!this.state.adoptionsInProcess && !this.state.adopted
+                        ? <h2>Enter your name in the Queue to get started!</h2>
                         : ''}
-                    {this.state.adopted ? (
-                        <div>
-                            {this.state.petType === 'cat'
-                                ? (<h3>Congrats you adopted {this.state.prevCat.name}!</h3>)
-                                : (<h3>Congrats you adopted {this.state.dog.name}!</h3>)}
+                    {this.state.adoptionsInProcess
+                        ? <h2>{this.state.previousAdopter} adopted {this.state.upForAdoption}!</h2>
+                        : ''}
+                    {this.state.adopted
+                        ? <div className='congratulations'>
+                            <h2>Congrats! You adopted {this.state.adoptedPet.name}</h2>
+                            <img src={this.state.adoptedPet.imageURL} alt={this.state.adoptedPet.description} className='circular-landscape'/>
                         </div>
-                    ) : ''}
-                    {this.state.first 
-                        ? ''
-                        : (<h3>Next Person In Queue</h3>)}
-                    {this.renderPeople()}
-                    <h3>Select Your Pet</h3>
-                    <select name='pet-type' defaultValue="cat" onChange={this.onPetTypeSelect}>
-                        <option>Cat</option>
-                        <option>Dog</option>
-                    </select>
-                    <h3>Get in the Queue</h3>
-                    <label htmlFor='get-in-queue'>
-                        Enter your name:
-                    </label>
-                    <input 
-                        type='text' 
-                        name='get-in-queue' 
-                        id='get-inqueue'
-                        required
-                        onInput={this.onInputName.bind(this)}
-                    />
-                    <button
-                        type='button'
-                        onClick={this.handleAddName}
-                    >
-                        Add Name
-                    </button>
+                        : ''}
+                    <div className='up-for-adoption'>
+                        <div className='queue-item queue-cat'>
+                            {this.renderCat()}
+                        </div>
+                        <div className='queue-item queue-dog'>
+                            {this.renderDog()}
+                        </div>
+                        <div className='queue-item queue-people'>
+                            <div className='next-in-line'>
+                                <h3>Next In Line</h3>
+                            </div>
+                            <div className='people-in-queue'>
+                                {this.renderPeople()}
+                            </div>
+                            <form className='get-in-queue'>
+                                <label htmlFor='get-in-queue'>
+                                    Add Your Name To Get In Line:
+                                </label>
+                                <input 
+                                    required
+                                    type='text' 
+                                    name='get-in-queue' 
+                                    id='get-in-queue'
+                                    onInput={e => this.onInputName(e)}
+                                />
+                                <button
+                                    // type='button'
+                                    onClick={this.handleAddName}
+                                >
+                                    Add Name
+                                </button>
+                            </form>
+                            {this.state.people[0] === this.state.adopter
+                                ? <span className='first-in-line'>It's your turn to adopt!</span>
+                                : ''}
+                        </div>
+                    </div>
                 </div>
             </div>
         )
-    }
-    
+    }   
 }
-
-export default Adopt

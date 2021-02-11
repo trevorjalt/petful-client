@@ -1,30 +1,17 @@
 .Header {
-    height: 20vh;
+    height: 15vh;
     display: flex;
     align-items: center;
-    justify-content: space-between;;
-    background-color: pink;
-    padding: 1vw 2vw 1vw 2vw;
-    margin-bottom: 4vh;
+    justify-content: center;
+    background-color: #44C3EE;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
     text-decoration: none;
+    z-index: 100;;
 }
 
-.Header__text {
-    font-weight: bold;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-.logo {
-    font-size: 6vh;
-    text-decoration: none;
-    color: black;
-}
-
-.navBar {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: black;
+h1 {
+    font-size: 9vh;;
 }

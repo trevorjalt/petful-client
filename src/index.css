@@ -1,0 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Pacifico&display=swap');
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 15vh;
+}
+h1 {
+    font-family: 'Pacifico', sans-serif;
+}

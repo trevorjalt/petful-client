@@ -1,3 +1,22 @@
+.adoption-link {
+    text-decoration: none;
+    margin-bottom: 3vh;
+}
+
+.adoption-text {
+    text-decoration: none;
+}
+
+hr {
+    background: linear-gradient(to right, #EF476F, #FFD166, #06D6A0);
+    height: 1px;
+    width: 50vw;
+}
+
+img {
+    width: 33.3vw;
+}
+
 .landing {
     display: flex;
     flex-direction: column;
@@ -11,4 +30,11 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-top: 8vh;
+}
+
+.pet-photos {
+    display: flex;
+    flex-direction: row;
+    width:100vw;
 }
