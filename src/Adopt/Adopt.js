@@ -247,7 +247,7 @@ export default class Adopt extends Component {
 
     renderCat = () => {
         let { cat } = this.state
-        console.log(cat)
+        
         return (
             <section>
                 {this.state.people[0] === this.state.adopter
