@@ -32,7 +32,10 @@ export default class Adopt extends Component {
 
         PetService.getPeople()
             .then(person =>
-                this.setState({ people: person })
+                this.setState({ 
+                    people: person,
+                    loading: false
+                })
         )
     }
 
@@ -308,7 +311,7 @@ export default class Adopt extends Component {
         return (
             <div className='adopt'>
                 {this.state.loading
-                    ?   <h2>Loading...</h2>
+                    ?   <div className='adopt__content'><h2>Loading...</h2></div>
                     : <div className='adopt__content'>
                         {!this.state.adoptionsInProcess && !this.state.adopted
                             ? <h2>Enter your name in the Queue to get started!</h2>
