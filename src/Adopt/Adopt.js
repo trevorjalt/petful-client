@@ -38,6 +38,9 @@ export default class Adopt extends Component {
 
     handleAddName = e => {
         e.preventDefault()
+
+        e.target.value = ''
+
         let name = this.state.name
 
         this.setState ({ adopted: false })
@@ -211,21 +214,22 @@ export default class Adopt extends Component {
 
 
     onInputName = e => {
-        this.setState({ name: e.target.value })
+        this.setState({ [e.target.name]: e.target.value })
     }
 
     renderAddNameForm = () => {
         return (
             <form className='get-in-queue'>
-                <label htmlFor='get-in-queue'>
+                <label htmlFor='name'>
                     Add Your Name To Get In Line:
                 </label>
                 <input 
                     required
                     type='text' 
-                    name='get-in-queue' 
-                    id='get-in-queue'
+                    name='name' 
+                    id='name-input'
                     onInput={e => this.onInputName(e)}
+                    value={this.state.name}
                 />
                 <button
                     onClick={this.handleAddName}
