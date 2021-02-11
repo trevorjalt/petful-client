@@ -307,40 +307,44 @@ export default class Adopt extends Component {
         }
         return (
             <div className='adopt'>
-                <div className='adopt__content'>
-                    {!this.state.adoptionsInProcess && !this.state.adopted
-                        ? <h2>Enter your name in the Queue to get started!</h2>
-                        : ''}
-                    {this.state.adoptionsInProcess
-                        ? <h2>{this.state.previousAdopter} adopted {this.state.upForAdoption}!</h2>
-                        : ''}
-                    {this.state.adopted
-                        ? <div className='congratulations'>
-                            <h2>Congrats! You adopted {this.state.adoptedPet.name}</h2>
-                            <img src={this.state.adoptedPet.imageURL} alt={this.state.adoptedPet.description} className='circular-landscape'/>
-                        </div>
-                        : ''}
-                    <div className='up-for-adoption'>
-                        <div className='queue-item queue-cat'>
-                            {this.renderCat()}
-                        </div>
-                        <div className='queue-item queue-dog'>
-                            {this.renderDog()}
-                        </div>
-                        <div className='queue-item queue-people'>
-                            <div className='next-in-line'>
-                                <h3>Next In Line</h3>
+                {this.state.loading
+                    ?   <h2>Loading...</h2>
+                    : <div className='adopt__content'>
+                        {!this.state.adoptionsInProcess && !this.state.adopted
+                            ? <h2>Enter your name in the Queue to get started!</h2>
+                            : ''}
+                        {this.state.adoptionsInProcess
+                            ? <h2>{this.state.previousAdopter} adopted {this.state.upForAdoption}!</h2>
+                            : ''}
+                        {this.state.adopted
+                            ? <div className='congratulations'>
+                                <h2>Congrats! You adopted {this.state.adoptedPet.name}</h2>
+                                <img src={this.state.adoptedPet.imageURL} alt={this.state.adoptedPet.description} className='circular-landscape'/>
                             </div>
-                            <div className='people-in-queue'>
-                                {this.renderPeople()}
+                            : ''}
+                        <div className='up-for-adoption'>
+                            <div className='queue-item queue-cat'>
+                                {this.renderCat()}
                             </div>
-                            {this.renderAddNameForm()}
-                            {this.state.people[0] === this.state.adopter
-                                ? <span className='first-in-line'>It's your turn to adopt!</span>
-                                : ''}
+                            <div className='queue-item queue-dog'>
+                                {this.renderDog()}
+                            </div>
+                            <div className='queue-item queue-people'>
+                                <div className='next-in-line'>
+                                    <h3>Next In Line</h3>
+                                </div>
+                                <div className='people-in-queue'>
+                                    {this.renderPeople()}
+                                </div>
+                                {this.renderAddNameForm()}
+                                {this.state.people[0] === this.state.adopter
+                                    ? <span className='first-in-line'>It's your turn to adopt!</span>
+                                    : ''}
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    </div>}
+
+                
             </div>
         )
     }   
