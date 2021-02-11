@@ -189,7 +189,7 @@ export default class Adopt extends Component {
                 adoptedPet: this.state.dog,
                 adoptionsInProcess: false
             })
-            PetService.deleteCat()
+            PetService.deleteDog()
                 .then(res => {
                     PetService.getDog()
                         .then(dog => {
