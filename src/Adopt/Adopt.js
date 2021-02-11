@@ -214,6 +214,29 @@ export default class Adopt extends Component {
         this.setState({ name: e.target.value })
     }
 
+    renderAddNameForm = () => {
+        return (
+            <form className='get-in-queue'>
+                <label htmlFor='get-in-queue'>
+                    Add Your Name To Get In Line:
+                </label>
+                <input 
+                    required
+                    type='text' 
+                    name='get-in-queue' 
+                    id='get-in-queue'
+                    onInput={e => this.onInputName(e)}
+                />
+                <button
+                    onClick={this.handleAddName}
+                    disabled={!this.state.name}
+                >
+                    Add Name
+                </button>
+            </form>
+        )
+    }
+
 
     renderCat = () => {
         let { cat } = this.state
@@ -307,24 +330,7 @@ export default class Adopt extends Component {
                             <div className='people-in-queue'>
                                 {this.renderPeople()}
                             </div>
-                            <form className='get-in-queue'>
-                                <label htmlFor='get-in-queue'>
-                                    Add Your Name To Get In Line:
-                                </label>
-                                <input 
-                                    required
-                                    type='text' 
-                                    name='get-in-queue' 
-                                    id='get-in-queue'
-                                    onInput={e => this.onInputName(e)}
-                                />
-                                <button
-                                    // type='button'
-                                    onClick={this.handleAddName}
-                                >
-                                    Add Name
-                                </button>
-                            </form>
+                            {this.renderAddNameForm()}
                             {this.state.people[0] === this.state.adopter
                                 ? <span className='first-in-line'>It's your turn to adopt!</span>
                                 : ''}

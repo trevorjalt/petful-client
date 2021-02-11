@@ -1,6 +1,6 @@
 .adoption-link {
     text-decoration: none;
-    margin-bottom: 3vh;
+    margin: 3vh 0 5vh 0;
 }
 
 .adoption-text {
@@ -37,4 +37,14 @@ img {
     display: flex;
     flex-direction: row;
     width:100vw;
+}
+
+.ready-button {
+    background: #052B38;
+    text-decoration: none;
+    color: white;
+    padding: 2vh;
+    border-radius: 35px;
+    border: solid white;
+    font-weight: bold;
 }

@@ -24,8 +24,6 @@ button {
     padding: 1.5vh;
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
-    /* color: white; */
-    /* background: */
 }
 
 .circular-landscape {
@@ -104,5 +102,4 @@ input {
 .up-for-adoption {
     display: flex;
     flex-direction: row;
-
 }

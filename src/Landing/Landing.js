@@ -18,7 +18,7 @@ export default class Landing extends Component {
                     <Link 
                         to="/adopt"
                     >
-                        I'm ready!
+                        <span className='ready-button'>I'm ready!</span>
                     </Link>
                     </div>
                     <div className='pet-photos'>
